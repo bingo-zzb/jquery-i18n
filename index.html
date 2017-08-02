@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="jquery-2.1.1.min.js"></script>
+    <script src="jquery.i18n.properties.min.js"></script>
+</head>
+<body>
+<div id="content">
+    <div>
+        <label setText="User.Name"></label>
+        <input type="text"></input>
+    </div>
+    <div>
+        <label setText="Password"></label>
+        <input type="password"></input>
+    </div>
+    <input type="button" id="button_login" setText="Login"/>
+</div>
+<script type="text/javascript">
+    $(function(){
+        loadProperties();
+        function loadProperties(language) {
+            $.i18n.properties({
+                name : 'strings', //资源文件名称
+                path : 'i18n/', //资源文件路径
+                mode : 'map', //用Map的方式使用资源文件中的值
+                language : language?language:"en",
+                encoding: 'UTF-8',
+                callback : function() {//加载成功后设置显示内容
+                    setVal();
+                }
+            });
+        }
+        function setVal() {
+            var $map = $.i18n.map;
+            for(var _this in $map) {
+                var $text = $("[setText=\""+_this+"\"]");
+                if($text.length > 0){
+                    $.each($text, function (index, element) {
+                        if(element.nodeName == "INPUT"){
+                            $text.val($map[_this]);
+                        }else {
+                            $text.text($map[_this]);
+                        }
+                    })
+                }
+            }
+        }
+        $("#button_login").on("click", function () {
+            loadProperties("zh");
+        })
+    });
+</script>
+</body>
+</html>
